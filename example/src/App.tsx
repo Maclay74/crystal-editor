@@ -1,10 +1,13 @@
 import React from 'react'
 
-import { ExampleComponent } from 'crystal-editor'
+import Editor from 'crystal-editor'
 import 'crystal-editor/dist/index.css'
 
 const App = () => {
-  return <ExampleComponent text="Create React Library Example 😄" />
+
+  const testHtml = "<p>Here we go!</p>";
+
+  return <Editor content={testHtml} />
 }
 
 export default App
