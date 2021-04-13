@@ -2,12 +2,10 @@
 
 import React from 'react'
 import Plugin from '../core/plugin'
-import { IElement } from '../core/block'
-import ContentEditable from 'react-contenteditable'
 import { stringify } from 'himalaya'
 
 interface IProps {
-  element: IElement
+  element: any
 }
 
 /**
