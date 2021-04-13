@@ -61,6 +61,7 @@
     "dist"
   ],
   "dependencies": {
-    "himalaya": "^1.1.0"
+    "himalaya": "^1.1.0",
+    "react-contenteditable": "^3.3.5"
   }
 }

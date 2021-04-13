@@ -11,11 +11,11 @@ interface IProps {
 }
 
 /**
- * Text plugin for "p" tag
+ * Text plugin for "table" tag
  */
-class Text extends Plugin {
-  static pluginName = 'Text'
-  static tagName = 'p'
+class Table extends Plugin {
+  static pluginName = 'Table'
+  static tagName = 'table'
 
   state = {
     content: ''
@@ -33,11 +33,7 @@ class Text extends Plugin {
 
   render() {
     const { content } = this.state
-    return (
-      <div style={{ padding: 30 }}>
-        <ContentEditable innerRef={this.contentEditable} html={content} />
-      </div>
-    )
+    return <div style={{ padding: 30 }} dangerouslySetInnerHTML={{__html: content}} />
   }
 
   toHtml(): string {
@@ -45,6 +41,4 @@ class Text extends Plugin {
   }
 }
 
-export default Text
-
-// TODO implement features from https://codesandbox.io/s/l91xvkox9l?file=/src/index.js:287-332
+export default Table

@@ -1,5 +1,4 @@
 import Text from './text'
+import Table from './table'
 
-export {
-  Text
-}
+export { Text, Table }

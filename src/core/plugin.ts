@@ -1,10 +1,11 @@
 // @ts-nocheck
 
+import React from 'react'
+
 /**
  * We should have a plugin for every tag that can be found in our document
  */
-abstract class Plugin {
-
+abstract class Plugin extends React.Component {
   public static pluginName
   public static tagName
 
@@ -17,6 +18,12 @@ abstract class Plugin {
    *  How to represent this element into html
    */
   public abstract toHtml(): string
+}
+
+interface IPlugin {
+  pluginName: string
+  tagName: string
+  toHtml: () => string
 }
 
 export default Plugin
