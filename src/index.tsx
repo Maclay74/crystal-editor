@@ -2,6 +2,9 @@
 import React, { createContext, useContext } from 'react'
 import { parse as parseHtmlToJson } from 'himalaya'
 import { Text, Table } from './plugins'
+import styles from './styles.module.scss'
+import Plugin from './core/plugin'
+import PluginSelect from './core/plugin-select.jsx'
 
 interface IProps {
   content: string
@@ -15,8 +18,11 @@ class CrystalEditor extends React.Component {
   // Default plugins
   private plugins: Plugin[] = [Text, Table]
 
+  private defaultPlugin: Plugin = Text
+
   state = {
-    blocks: [] // Blocks with elements, like text, images, etc
+    blocks: [], // Blocks with elements, like text, images, etc,
+    showPluginSelector: false
   }
 
   private blocksRefs = []
@@ -66,24 +72,67 @@ class CrystalEditor extends React.Component {
         console.debug('   Core: create new block: ' + plugin.name)
 
         // Create new plugin instance with this block
-        const block = React.createElement(plugin, {
-          element,
-          ref: (ref) => this.blocksRefs.push(ref),
-          key
-        })
-        blocks.push(block)
+        blocks.push(this.createBlock(plugin, element, key))
       }
     })
+
+    blocks.push(this.createBlock(this.defaultPlugin))
 
     this.setState({
       blocks
     })
   }
 
-  public render(): React.ReactNode {
-    const { blocks } = this.state
+  /**
+   * Create new block
+   * @param plugin
+   * @param element
+   * @param index
+   * @private
+   */
+  private createBlock(plugin, element, index) {
+    return React.createElement(plugin, {
+      element,
+      ref: (ref) => this.blocksRefs.push(ref),
+      key: index || this.state.blocks.length,
+      editor: this
+    })
+  }
 
-    return <div>{blocks}</div>
+  /**
+   * Show plugin selector with all the plugins we have
+   * @param target
+   */
+  public showPluginSelector(target: HTMLElement) {
+    this.setState({
+      showPluginSelector: target
+    })
+  }
+
+  /**
+   * Hide plugin selector
+   * @private
+   */
+  private closePluginSelector() {
+    this.setState({
+      showPluginSelector: false
+    })
+  }
+
+  public render(): React.ReactNode {
+    const { blocks, showPluginSelector } = this.state
+
+    return (
+      <EditorContext.Provider value={this}>
+        <div className={styles.editor}>
+          <PluginSelect
+            anchor={showPluginSelector}
+            close={() => this.closePluginSelector()}
+          />
+          {blocks}
+        </div>
+      </EditorContext.Provider>
+    )
   }
 }
 

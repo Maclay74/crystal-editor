@@ -12,3 +12,59 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+:root {
+  --color-bg-gray: #f0f0f0;
+  --blueBg: rgba(64, 134, 224, 0.1);
+  --color-line-gray: rgba(0, 0, 0, 0.1);
+  --color-line-blue: rgba(64, 134, 224, 0.2);
+  --color-text-main: #000;
+  --color-text-gray: #595959;
+  --color-text-blue: #4086e0;
+  --color-text-blue-hover: #0d7bcd;
+  --color-text-negative: #e92a40;
+  --color-online: #07a23b;
+  --width-aside: 375px;
+  --interlocutorBubbleBg: #f4f7f9;
+  --ownBubbleBg: #dfecff;
+}
+
+body {
+  background-color: var(--color-bg-gray);
+}
+
+.editor {
+  background-color: white;
+  max-width: 1000px;
+  margin: 0 auto;
+  min-height: 100vh;
+  position: relative;
+  padding: 20px 100px;
+  box-sizing: border-box;
+}
+
+.actions {
+  position: absolute;
+  bottom: 0;
+  padding: 20px 100px;
+  background-color: var(--ownBubbleBg);
+  right: 0;
+  left: 0;
+}
+
+.title-input {
+  font-size: 36px;
+  font-weight: bold;
+  color: #353535;
+  box-sizing: border-box;
+  padding: 0;
+  border: none;
+  margin: 50px 0;
+  width: 100% ;
+  background-color: transparent;
+  outline: none;
+}
+
+::placeholder {
+  color: var(--color-text-gray);
+}

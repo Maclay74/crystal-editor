@@ -1,0 +1,28 @@
+.container {
+  position: relative;
+}
+
+.input {
+  outline: none;
+
+  &:not(:empty) + .placeholder {
+    display: none;
+  }
+
+  &:not(:empty) ~ .pluginSelectButton {
+    display: none;
+  }
+}
+.placeholder {
+  position: absolute;
+  top: 0;
+  font-style: italic;
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+.pluginSelectButton {
+  position: absolute !important;
+  left: -50px;
+  top: -12px;
+}

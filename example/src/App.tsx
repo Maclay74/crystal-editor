@@ -1,23 +1,27 @@
 // @ts-nocheck
 
 import React, { useRef } from 'react'
-
 import Editor from 'crystal-editor'
+
+import Button from '@material-ui/core/Button';
 import 'crystal-editor/dist/index.css'
 
 const App = () => {
   const editor = useRef()
 
-  const testHtml = '<p>Here <b>we go!</b></p>' +
-    '<table><tbody><tr><td>here</td><td>we</td><td>go</td></tr></tbody></table>'
+  const testHtml = ''
 
   return (
-    <>
+    <div className={'editor'}>
+      <input type='text' className={'title-input'} placeholder={'Title'} />
       <Editor content={testHtml} ref={editor} />
-      <button onClick={() => console.log(editor.current.content)}>
-        Get html
-      </button>
-    </>
+
+      <div className='actions'>
+        <Button variant='contained' color='primary'>
+          Get html
+        </Button>
+      </div>
+    </div>
   )
 }
 

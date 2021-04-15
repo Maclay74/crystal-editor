@@ -1,4 +1,4 @@
-import Text from './text'
+import Text from './text/text'
 import Table from './table'
 
 export { Text, Table }
