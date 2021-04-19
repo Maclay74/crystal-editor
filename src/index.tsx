@@ -1,18 +1,17 @@
 // @ts-nocheck
-import React, { createContext, useContext } from 'react'
+import React from 'react'
 import { parse as parseHtmlToJson } from 'himalaya'
 import { Text, Table } from './plugins'
 import styles from './styles.module.scss'
 import Plugin from './core/plugin'
-import PluginSelect from './core/plugin-select.jsx'
+import { Context as EditorContext } from './core/context'
+import PluginSelect from './core/plugin-select'
 
 interface IProps {
   content: string
   plugins: Plugin[]
   ref: any
 }
-
-const EditorContext = createContext(null)
 
 class CrystalEditor extends React.Component {
   // Default plugins
@@ -84,6 +83,21 @@ class CrystalEditor extends React.Component {
   }
 
   /**
+   * Adds new block to composition
+   * @param plugin
+   * @param element
+   */
+  public addBlock(plugin, element) {
+    const block = this.createBlock(plugin, element)
+    const { blocks } = this.state
+    blocks.splice(blocks.length - 1, 0, block)
+
+    this.setState({
+      blocks: [...blocks]
+    })
+  }
+
+  /**
    * Create new block
    * @param plugin
    * @param element
@@ -135,8 +149,6 @@ class CrystalEditor extends React.Component {
     )
   }
 }
-
-export const useEditorContext = () => useContext(EditorContext)
 
 export default React.forwardRef((props, ref) => (
   <CrystalEditor innerRef={ref} {...props} />

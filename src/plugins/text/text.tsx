@@ -7,6 +7,7 @@ import { stringify } from 'himalaya'
 import styles from './styles.module.scss'
 import IconButton from '@material-ui/core/IconButton'
 import AddIcon from '@material-ui/icons/Add'
+import TextFieldsOutlinedIcon from '@material-ui/icons/TextFieldsOutlined';
 import CrystalEditor from '../index'
 
 interface IProps {
@@ -21,23 +22,16 @@ class Text extends Plugin {
   static pluginName = 'Text'
   static tagName = 'p'
 
+  static getIcon() {
+    return <TextFieldsOutlinedIcon />
+  }
+
   state = {
     content: ''
   }
 
   // Ref for content editable
   contentEditable = React.createRef()
-
-  constructor(props: IProps) {
-    super(props)
-
-    const { element } = props
-
-    // Parse inner content, so we could edit
-    if (element) {
-      this.state.content = stringify([element])
-    }
-  }
 
   private onAddBlockClick(event) {
     this.props.editor.showPluginSelector(event.currentTarget)
