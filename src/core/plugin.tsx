@@ -3,6 +3,13 @@
 import React, { ReactNode } from 'react'
 import { Context as EditorContext } from './context'
 import { stringify } from 'himalaya'
+import { CrystalEditor } from '../index'
+
+interface IProps {
+  element: any
+  editor: CrystalEditor
+  uuid: string
+}
 
 /**
  * We should have a plugin for every tag that can be found in our document
@@ -11,7 +18,7 @@ abstract class Plugin extends React.Component {
   public static pluginName
   public static tagName
 
-  protected constructor(props) {
+  protected constructor(props: IProps) {
     super(props)
 
     const { element } = props
@@ -20,6 +27,15 @@ abstract class Plugin extends React.Component {
     if (element) {
       this.state.content = stringify([element])
     }
+  }
+
+  /**
+   * Check whether this block is last
+   * @private
+   */
+  protected get isLastBlock() {
+    const { blocks } = this.props.editor.state
+    return blocks[blocks.length - 1].props.uuid === this.props.uuid
   }
 
   /**

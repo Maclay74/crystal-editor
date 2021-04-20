@@ -10,7 +10,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
 
 interface IProps {
-  anchor: HTMLElement
+  anchor: Plugin
   close: () => void
 }
 
@@ -19,8 +19,18 @@ const PluginSelect = (props: IProps) => {
   const editor = useEditorContext()
   const open = Boolean(anchor)
 
+  /**
+   * When select plugin, add new or replace existing text block
+   * @param plugin
+   */
   const onPluginClick = (plugin) => {
-    console.log(editor.addBlock(plugin))
+    // If this element is last, insert new block before it
+    // Or replace this block
+
+    editor.addBlockBefore(plugin, null, anchor)
+    if (!anchor.isLastBlock) {
+      editor.removeBlock(anchor)
+    }
     close()
   }
 
@@ -28,7 +38,7 @@ const PluginSelect = (props: IProps) => {
     <div>
       <Menu
         id='long-menu'
-        anchorEl={anchor}
+        anchorEl={anchor?.plusIcon?.current}
         keepMounted
         open={open}
         onClose={close}

@@ -1,6 +1,7 @@
 // @ts-nocheck
 import React from 'react'
 import { parse as parseHtmlToJson } from 'himalaya'
+import { v4 as uuidv4 } from 'uuid'
 import { Text, Table } from './plugins'
 import styles from './styles.module.scss'
 import Plugin from './core/plugin'
@@ -83,14 +84,59 @@ class CrystalEditor extends React.Component {
   }
 
   /**
-   * Adds new block to composition
+   * Add new block before target block
    * @param plugin
    * @param element
+   * @param targetRef
    */
-  public addBlock(plugin, element) {
-    const block = this.createBlock(plugin, element)
+  public addBlockBefore(plugin: Plugin, element = null, targetRef = null) {
     const { blocks } = this.state
-    blocks.splice(blocks.length - 1, 0, block)
+    const block = this.createBlock(plugin, element)
+
+    // By default, add new block to the beginning of the composition
+    let targetIndex = 0
+
+    if (targetRef) {
+      // Find target block index
+      targetIndex = this.state.blocks.findIndex(
+        (block) => block.props.uuid === targetRef.props.uuid
+      )
+    }
+    // If target block is first, put new block at the beginning of the aray
+    if (targetIndex === 0) {
+      blocks.unshift(block)
+
+      // Otherwise, put new block before in line
+    } else {
+      blocks.splice(targetIndex, 0, block)
+    }
+
+    this.setState({
+      blocks: [...blocks]
+    })
+  }
+
+  /**
+   * Add new block after target block
+   * @param plugin
+   * @param element
+   * @param targetRef
+   */
+  public addBlockAfter(plugin: Plugin, element = null, targetRef = null) {
+    const { blocks } = this.state
+    const block = this.createBlock(plugin, element)
+
+    // By default, add at the end of the composition
+    let targetIndex = blocks.length - 1
+
+    if (targetRef) {
+      // Find target block index
+      targetIndex = this.state.blocks.findIndex(
+        (block) => block.props.uuid === targetRef.props.uuid
+      )
+    }
+
+    blocks.splice(targetIndex + 1, 0, block)
 
     this.setState({
       blocks: [...blocks]
@@ -105,11 +151,33 @@ class CrystalEditor extends React.Component {
    * @private
    */
   private createBlock(plugin, element, index) {
+    const uuid = uuidv4()
     return React.createElement(plugin, {
       element,
       ref: (ref) => this.blocksRefs.push(ref),
-      key: index || this.state.blocks.length,
-      editor: this
+      key: uuid,
+      editor: this,
+      uuid
+    })
+  }
+
+  public removeBlock(targetRef) {
+    // We have to remove block from two places - from render and internal memory
+    // so it would be taken in count when generating html
+
+    const ref = this.blocksRefs.find((ref) => ref === targetRef)
+    const block = this.state.blocks.find(
+      (block) => block.props.uuid === ref.props.uuid
+    )
+
+    // Remove from refs
+    this.blocksRefs = this.blocksRefs.filter(
+      (existingRef) => existingRef !== ref
+    )
+
+    // Remove from render
+    this.setState({
+      blocks: this.state.blocks.filter((exitingBlock) => exitingBlock !== block)
     })
   }
 
@@ -117,7 +185,7 @@ class CrystalEditor extends React.Component {
    * Show plugin selector with all the plugins we have
    * @param target
    */
-  public showPluginSelector(target: HTMLElement) {
+  public showPluginSelector(target) {
     this.setState({
       showPluginSelector: target
     })
@@ -149,6 +217,8 @@ class CrystalEditor extends React.Component {
     )
   }
 }
+
+export { CrystalEditor }
 
 export default React.forwardRef((props, ref) => (
   <CrystalEditor innerRef={ref} {...props} />
