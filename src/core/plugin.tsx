@@ -54,6 +54,70 @@ abstract class Plugin extends React.Component {
    *  How to represent this element into html
    */
   public abstract toHtml(): string
+
+  /**
+   * After adding new block we focus on it by calling this function
+   */
+  public focus() {}
+
+  /**
+   * Get next block in composition
+   */
+  public get nextBlock(): ReactNode {
+    const { blocks } = this.props.editor.state
+
+    const currentIndex = blocks.findIndex(
+      (block) => block.props.uuid === this.props.uuid
+    )
+
+    // If we have block after this one
+    if (currentIndex < blocks.length - 1) {
+      return blocks[currentIndex + 1]
+    }
+    return null
+  }
+
+  /**
+   * Get previous block in composition
+   */
+  public get prevBlock(): ReactNode {
+    const { blocks } = this.props.editor.state
+
+    const currentIndex = blocks.findIndex(
+      (block) => block.props.uuid === this.props.uuid
+    )
+
+    if (currentIndex > 0) return blocks[currentIndex - 1]
+    return null
+  }
+
+  /**
+   * Get next ref in composition
+   */
+  public get nextRef(): Plugin {
+    const { blocksRefs } = this.props.editor
+
+    if (this.nextBlock) {
+      return blocksRefs
+        .filter(Boolean)
+        .find((ref) => ref.props.uuid === this.nextBlock.props.uuid)
+    }
+
+    return null
+  }
+
+  /**
+   * Get previous ref in composition
+   */
+  public get prevRef(): Plugin {
+    const { blocksRefs } = this.props.editor
+
+    if (this.prevBlock) {
+      return blocksRefs
+        .filter(Boolean)
+        .find((ref) => ref.props.uuid === this.prevBlock.props.uuid)
+    }
+  }
 }
 
 interface IPlugin {

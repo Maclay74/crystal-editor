@@ -89,7 +89,11 @@ class CrystalEditor extends React.Component {
    * @param element
    * @param targetRef
    */
-  public addBlockBefore(plugin: Plugin, element = null, targetRef = null) {
+  public addBlockBefore(
+    plugin: Plugin,
+    element = null,
+    targetRef = null
+  ): Plugin {
     const { blocks } = this.state
     const block = this.createBlock(plugin, element)
 
@@ -114,6 +118,8 @@ class CrystalEditor extends React.Component {
     this.setState({
       blocks: [...blocks]
     })
+
+    return block
   }
 
   /**
@@ -122,7 +128,11 @@ class CrystalEditor extends React.Component {
    * @param element
    * @param targetRef
    */
-  public addBlockAfter(plugin: Plugin, element = null, targetRef = null) {
+  public addBlockAfter(
+    plugin: Plugin,
+    element = null,
+    targetRef = null
+  ): Plugin {
     const { blocks } = this.state
     const block = this.createBlock(plugin, element)
 
@@ -141,6 +151,8 @@ class CrystalEditor extends React.Component {
     this.setState({
       blocks: [...blocks]
     })
+
+    return block
   }
 
   /**
@@ -170,10 +182,13 @@ class CrystalEditor extends React.Component {
       (block) => block.props.uuid === ref.props.uuid
     )
 
+    // If we have block after removing, focus on it
+    if (ref.nextRef) ref.nextRef.focus()
+
     // Remove from refs
-    this.blocksRefs = this.blocksRefs.filter(
-      (existingRef) => existingRef !== ref
-    )
+    this.blocksRefs = this.blocksRefs
+      .filter((existingRef) => existingRef !== ref)
+      .filter(Boolean)
 
     // Remove from render
     this.setState({

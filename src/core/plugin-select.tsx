@@ -27,10 +27,22 @@ const PluginSelect = (props: IProps) => {
     // If this element is last, insert new block before it
     // Or replace this block
 
-    editor.addBlockBefore(plugin, null, anchor)
+    const newBlock = editor.addBlockBefore(plugin, null, anchor)
+
+    // If this block is in the middle of composition
+    // we remove it, because it's better for UX
     if (!anchor.isLastBlock) {
       editor.removeBlock(anchor)
     }
+    setTimeout(() => {
+      const newBlockRef = editor.blocksRefs.filter(Boolean).find((ref) => {
+        return ref.props.uuid === newBlock.props.uuid
+      })
+
+      // Focus on newly created block after adding it to the compositing
+      newBlockRef.focus()
+    }, 100)
+
     close()
   }
 

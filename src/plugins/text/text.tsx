@@ -1,6 +1,7 @@
 // @ts-nocheck
 
 import React from 'react'
+import ReactDOM from 'react-dom'
 import Plugin from '../../core/plugin'
 import ContentEditable from 'react-contenteditable'
 import styles from './styles.module.scss'
@@ -48,7 +49,7 @@ class Text extends Plugin {
     switch (event.key) {
       case 'Backspace':
         // If content if empty, we remove block
-        if (this.state.content.length === 0) this.remove()
+        if (this.isEmptyContent) this.remove()
         break
 
       default:
@@ -57,11 +58,20 @@ class Text extends Plugin {
   }
 
   /**
+   * What we consider as empty for content
+   * @private
+   */
+  private get isEmptyContent(): boolean {
+    const { content } = this.state
+    return !content.length || content === '<br>'
+  }
+
+  /**
    * Fires when user focus on block
    * @param state
    * @private
    */
-  private onHover(state: boolean) {
+  private onHover(state: boolean): void {
     this.setState({
       showPlaceholder: state
     })
@@ -72,11 +82,14 @@ class Text extends Plugin {
    * @private
    */
   private remove() {
-
     // We remove block only if this block is not last
     if (!this.isLastBlock) {
       this.props.editor.removeBlock(this)
     }
+  }
+
+  public focus() {
+    this.contentEditable.current.focus()
   }
 
   onChange(event) {
