@@ -15,3 +15,9 @@ declare module '*.svg' {
   export default svgUrl;
   export { svgComponent as ReactComponent }
 }
+
+declare module '*.scss' {
+  const content: Record<string, string>;
+  export default content;
+}
+

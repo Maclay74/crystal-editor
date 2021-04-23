@@ -11,13 +11,17 @@ const App = () => {
 
   const testHtml = ''
 
+  const onGetHtmlClick = () => {
+    console.log(editor.current.content)
+  }
+
   return (
     <div className={'editor'}>
       <input type='text' className={'title-input'} placeholder={'Title'} />
       <Editor content={testHtml} ref={editor} />
 
       <div className='actions'>
-        <Button variant='contained' color='primary'>
+        <Button variant='contained' color='primary' onClick={onGetHtmlClick}>
           Get html
         </Button>
       </div>
